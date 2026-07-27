@@ -6,11 +6,11 @@
 }
 
 body{
-    background:#f5f7fb;
+    background:linear-gradient(135deg,#eef6ff,#ffffff);
     color:#222;
 }
 
-/* Navigation Bar */
+/* Navigation */
 
 nav{
     display:flex;
@@ -18,11 +18,13 @@ nav{
     align-items:center;
     padding:20px 8%;
     background:white;
-    box-shadow:0 2px 15px rgba(0,0,0,0.08);
+    box-shadow:0 2px 15px rgba(0,0,0,.08);
+    position:sticky;
+    top:0;
 }
 
 .logo{
-    font-size:28px;
+    font-size:30px;
     font-weight:700;
     color:#1976d2;
 }
@@ -39,7 +41,7 @@ nav ul li{
 nav ul li a{
     text-decoration:none;
     color:#333;
-    font-weight:500;
+    font-weight:600;
     transition:.3s;
 }
 
@@ -47,33 +49,35 @@ nav ul li a:hover{
     color:#1976d2;
 }
 
-/* Hero Section */
+/* Hero */
 
 .hero{
     display:flex;
-    justify-content:center;
+    justify-content:space-between;
     align-items:center;
-    text-align:center;
-    min-height:85vh;
-    padding:20px;
+    padding:70px 8%;
+    gap:50px;
+}
+
+.hero-text{
+    flex:1;
 }
 
 .hero-text h1{
-    font-size:48px;
+    font-size:55px;
     color:#0d47a1;
+    line-height:1.2;
     margin-bottom:20px;
 }
 
 .hero-text p{
     font-size:18px;
-    color:#666;
-    max-width:650px;
-    margin:auto;
+    color:#555;
     line-height:1.8;
+    margin-bottom:35px;
 }
 
 button{
-    margin-top:35px;
     padding:15px 35px;
     border:none;
     border-radius:50px;
@@ -85,6 +89,63 @@ button{
 }
 
 button:hover{
-    background:#1259a7;
-    transform:translateY(-3px);
+    background:#0d47a1;
+    transform:translateY(-5px);
+}
+
+.hero-image{
+    flex:1;
+    text-align:center;
+}
+
+.hero-image img{
+    width:100%;
+    max-width:500px;
+    border-radius:20px;
+    animation:float 3s ease-in-out infinite;
+}
+
+/* Floating Animation */
+
+@keyframes float{
+
+0%{
+transform:translateY(0px);
+}
+
+50%{
+transform:translateY(-15px);
+}
+
+100%{
+transform:translateY(0px);
+}
+
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+nav{
+flex-direction:column;
+}
+
+nav ul{
+margin-top:15px;
+}
+
+.hero{
+flex-direction:column;
+text-align:center;
+}
+
+.hero-text h1{
+font-size:38px;
+}
+
+.hero-image img{
+max-width:320px;
+}
+
 }
