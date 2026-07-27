@@ -14,7 +14,7 @@ startTrip.addEventListener("click", () => {
         return;
     }
 
-    navigator.geolocation.watchPosition(
+    navigator.geolocation.getCurrentPosition(
 
         async (position) => {
 
@@ -39,7 +39,10 @@ startTrip.addEventListener("click", () => {
         },
 
         (error) => {
-            alert("Error " + error.code + ": " + error.message);
+
+    alert("Error Code: " + error.code);
+    alert("Message: " + error.message);
+
         },
 
         {
