@@ -1,1 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>Student Dashboard</title>
+
+<link rel="stylesheet" href="dashboard.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<header>
+
+    <h1>🚌 SmartBus</h1>
+
+    <button id="logoutBtn">Logout</button>
+
+</header>
+
+<div class="dashboard">
+
+    <div class="card">
+        <h2>Bus Status</h2>
+        <p id="status">🟢 Running</p>
+    </div>
+
+    <div class="card">
+        <h2>Estimated Arrival</h2>
+        <p id="eta">12 Minutes</p>
+    </div>
+
+    <div class="card">
+        <h2>Current Location</h2>
+        <p id="location">MIT Campus Gate</p>
+    </div>
+
+</div>
+
+<section class="map">
+
+    <h2>Live Bus Location</h2>
+
+    <div id="map">
+        Live Map Coming Soon
+    </div>
+
+</section>
+
+<script type="module" src="student.js"></script>
+
+</body>
+</html>
