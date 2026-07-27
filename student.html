@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -8,7 +10,13 @@
 
 <link rel="stylesheet" href="dashboard.css">
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
 </head>
 
 <body>
@@ -24,17 +32,17 @@
 <div class="dashboard">
 
     <div class="card">
-        <h2>Bus Status</h2>
-        <p id="status">🟢 Running</p>
+        <h2>🟢 Bus Status</h2>
+        <p id="status">Running</p>
     </div>
 
     <div class="card">
-        <h2>Estimated Arrival</h2>
+        <h2>⏱ Estimated Arrival</h2>
         <p id="eta">12 Minutes</p>
     </div>
 
     <div class="card">
-        <h2>Current Location</h2>
+        <h2>📍 Current Location</h2>
         <p id="location">MIT Campus Gate</p>
     </div>
 
@@ -42,15 +50,16 @@
 
 <section class="map">
 
-    <h2>Live Bus Location</h2>
+    <h2>🗺 Live Bus Location</h2>
 
-    <div id="map">
-        Live Map Coming Soon
-    </div>
+    <div id="map"></div>
 
 </section>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
 <script type="module" src="student.js"></script>
 
 </body>
+
 </html>
