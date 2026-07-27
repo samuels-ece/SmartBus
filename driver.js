@@ -57,26 +57,43 @@ startTrip.addEventListener("click", () => {
 
         (error) => {
 
-            startTrip.disabled = false;
-            startTrip.innerText = "Start Trip";
+    switch (error.code) {
 
-            switch (error.code) {
+        case error.PERMISSION_DENIED:
 
-                case error.PERMISSION_DENIED:
-                    alert("Location permission denied.\n\nPlease allow location access.");
-                    break;
+            alert(
+                "📍 Location Required\n\n" +
+                "Please turn on your device's Location (GPS) and allow location permission to start the trip."
+            );
 
-                case error.POSITION_UNAVAILABLE:
-                    alert("Please turn ON your device Location (GPS).");
-                    break;
+            break;
 
-                case error.TIMEOUT:
-                    alert("Unable to get your location.\nPlease try again.");
-                    break;
+        case error.POSITION_UNAVAILABLE:
 
-                default:
-                    alert("Unknown location error.");
-            }
+            alert(
+                "📍 Unable to get your location.\n\n" +
+                "Please make sure your GPS is turned on."
+            );
+
+            break;
+
+        case error.TIMEOUT:
+
+            alert(
+                "📍 Location request timed out.\n\n" +
+                "Please try again."
+            );
+
+            break;
+
+        default:
+
+            alert(
+                "Unable to get your current location.\n\n" +
+                "Please turn on GPS and try again."
+            );
+
+    }
 
         },
 
