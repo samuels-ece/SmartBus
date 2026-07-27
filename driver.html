@@ -1,1 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Driver Dashboard</title>
+
+<link rel="stylesheet" href="dashboard.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+<header>
+
+    <h1>🚌 Driver Dashboard</h1>
+
+    <button id="logoutBtn">Logout</button>
+
+</header>
+
+<div class="dashboard">
+
+    <div class="card">
+        <h2>Trip Status</h2>
+        <p id="tripStatus">Not Started</p>
+    </div>
+
+    <div class="card">
+        <h2>Current Location</h2>
+        <p id="driverLocation">Waiting for GPS...</p>
+    </div>
+
+</div>
+
+<div style="text-align:center; margin:30px;">
+
+    <button id="startTrip">Start Trip</button>
+
+</div>
+
+<script type="module" src="driver.js"></script>
+
+</body>
+
+</html>
