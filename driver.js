@@ -1,35 +1,53 @@
+import { db } from "./firebase.js";
+
+import {
+  doc,
+  updateDoc
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
 const startTrip = document.getElementById("startTrip");
 
 startTrip.addEventListener("click", () => {
 
-    if (navigator.geolocation) {
+    if (!navigator.geolocation) {
+        alert("Geolocation is not supported.");
+        return;
+    }
 
-        navigator.geolocation.getCurrentPosition(
+    navigator.geolocation.watchPosition(
 
-            (position) => {
+        async (position) => {
 
-                const latitude = position.coords.latitude;
-                const longitude = position.coords.longitude;
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
 
-                document.getElementById("tripStatus").innerText = "Running";
+            document.getElementById("tripStatus").innerText = "Running";
 
-                document.getElementById("driverLocation").innerText =
-                    latitude + ", " + longitude;
+            document.getElementById("driverLocation").innerText =
+                latitude + ", " + longitude;
 
-            },
-
-            () => {
-
-                alert("Unable to get location.");
-
+            try {
+                await updateDoc(doc(db, "bus", "live"), {
+                    latitude: latitude,
+                    longitude: longitude,
+                    status: "Running"
+                });
+            } catch (error) {
+                console.log(error);
+                alert("Failed to update Firestore.");
             }
 
-        );
+        },
 
-    } else {
+        (error) => {
+            alert("Unable to get location.");
+            console.log(error);
+        },
 
-        alert("Geolocation is not supported.");
+        {
+            enableHighAccuracy: true
+        }
 
-    }
+    );
 
 });
