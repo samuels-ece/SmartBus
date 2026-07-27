@@ -1,5 +1,5 @@
-import { db } from "./firebase.js";
-
+import { db, auth } from "./firebase.js";
+import { signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 import {
   doc,
   updateDoc
@@ -49,5 +49,16 @@ startTrip.addEventListener("click", () => {
         }
 
     );
+
+});
+document.getElementById("logoutBtn").addEventListener("click", () => {
+
+    signOut(auth)
+        .then(() => {
+            window.location.href = "login.html";
+        })
+        .catch((error) => {
+            alert(error.message);
+        });
 
 });
