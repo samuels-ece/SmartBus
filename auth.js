@@ -31,6 +31,9 @@ loginBtn.addEventListener("click", async () => {
 
         const role = userDoc.data().role;
 
+alert("Role = [" + role + "]");
+console.log("Role =", role);
+
         if (role === "student") {
             window.location.href = "student.html";
         } else if (role === "driver") {
