@@ -39,10 +39,11 @@ startTrip.addEventListener("click", () => {
 
         },
 
-        (error) => {
-            alert("Unable to get location.");
-            console.log(error);
-        },
+      (error) => {
+    alert("Error Code: " + error.code);
+    alert("Error Message: " + error.message);
+    console.log(error);
+},
 
         {
             enableHighAccuracy: true
