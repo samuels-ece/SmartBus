@@ -9,9 +9,15 @@ import {
     getDoc
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
+console.log("auth.js loaded");
+
 const loginBtn = document.getElementById("loginBtn");
 
+console.log(loginBtn);
+
 loginBtn.addEventListener("click", async () => {
+
+    alert("Login button clicked");
 
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
@@ -20,32 +26,24 @@ loginBtn.addEventListener("click", async () => {
 
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
 
+        alert("Firebase Login Success");
+
         const uid = userCredential.user.uid;
 
         const userDoc = await getDoc(doc(db, "users", uid));
 
         if (!userDoc.exists()) {
-            alert("User data not found.");
+            alert("User data not found");
             return;
         }
 
-        const role = userDoc.data().role;
-
-        if (role === "student") {
-            window.location.href = "student.html";
-        }
-        else if (role === "driver") {
-            window.location.href = "driver.html";
-        }
-        else if (role === "admin") {
-            window.location.href = "admin.html";
-        }
-        else {
-            alert("Invalid role.");
-        }
+        alert("Role: " + userDoc.data().role);
 
     } catch (error) {
+
         alert(error.message);
+        console.log(error);
+
     }
 
 });
