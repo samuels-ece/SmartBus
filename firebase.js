@@ -5,7 +5,7 @@ import { getFirestore } from "https://www.gstatic.com/firebasejs/12.1.0/firebase
 
 // Firebase Configuration
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
+  apiKey: "AIzaSyCOTZqI8Iwp2YcONs_hABfl3qq1OJP4yGs",
   authDomain: "smartbus-523f4.firebaseapp.com",
   projectId: "smartbus-523f4",
   storageBucket: "smartbus-523f4.firebasestorage.app",
