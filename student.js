@@ -1,13 +1,38 @@
-// Create map centered on Chennai
-const map = L.map('map').setView([13.0827, 80.2707], 13);
+import { db } from "./firebase.js";
 
-// Load OpenStreetMap
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors'
+import {
+  doc,
+  onSnapshot
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+// Create map
+const map = L.map("map").setView([13.0827, 80.2707], 15);
+
+// OpenStreetMap
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: "&copy; OpenStreetMap contributors"
 }).addTo(map);
 
-// Add a bus marker
+// Bus marker
 const busMarker = L.marker([13.0827, 80.2707]).addTo(map);
 
-// Popup
-busMarker.bindPopup("🚌 SmartBus").openPopup();
+// Listen for live updates
+onSnapshot(doc(db, "bus", "live"), (docSnap) => {
+
+    if (!docSnap.exists()) return;
+
+    const data = docSnap.data();
+
+    const lat = data.latitude;
+    const lng = data.longitude;
+
+    busMarker.setLatLng([lat, lng]);
+
+    map.setView([lat, lng], 16);
+
+    document.getElementById("status").innerText = data.status;
+
+    document.getElementById("location").innerText =
+        lat.toFixed(5) + ", " + lng.toFixed(5);
+
+});
