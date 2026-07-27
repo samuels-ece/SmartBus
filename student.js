@@ -1,4 +1,4 @@
-import { db } from "./firebase.js";
+import { db, auth } from "./firebase.js";
 
 import {
   doc,
@@ -34,5 +34,18 @@ onSnapshot(doc(db, "bus", "live"), (docSnap) => {
 
     document.getElementById("location").innerText =
         lat.toFixed(5) + ", " + lng.toFixed(5);
+
+});
+import { signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+document.getElementById("logoutBtn").addEventListener("click", () => {
+
+    signOut(auth)
+        .then(() => {
+            window.location.href = "login.html";
+        })
+        .catch((error) => {
+            alert(error.message);
+        });
 
 });
