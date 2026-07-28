@@ -1,71 +1,118 @@
 import { db, auth } from "./firebase.js";
 
 import {
-  doc,
-  onSnapshot,
-  collection,
-  getDocs
+    doc,
+    onSnapshot,
+    collection,
+    getDocs
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 import {
-  signOut
+    signOut
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
-// Create map
+// ==========================
+// Create Map
+// ==========================
+
 const map = L.map("map").setView([13.0827, 80.2707], 13);
 
 // OpenStreetMap
+
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution: "&copy; OpenStreetMap contributors"
 }).addTo(map);
 
-// Bus marker
+// ==========================
+// Bus Marker
+// ==========================
+
 const busMarker = L.marker([13.0827, 80.2707]).addTo(map);
 
-// Load all bus stops
+busMarker.bindPopup("🚌 SmartBus");
+
+// ==========================
+// Load Bus Stops
+// ==========================
+
 async function loadStops() {
 
-    const snapshot = await getDocs(collection(db, "routes", "bus1", "stops"));
+    try {
 
-    snapshot.forEach((stop) => {
+        const snapshot = await getDocs(
+            collection(db, "routes", "bus1", "stops")
+        );
 
-        const data = stop.data();
+        snapshot.forEach((stopDoc) => {
 
-        L.marker([data.latitude, data.longitude])
-            .addTo(map)
-            .bindPopup("🚏 " + data.name);
+            const stop = stopDoc.data();
 
-    });
+            L.marker([stop.latitude, stop.longitude])
+                .addTo(map)
+                .bindPopup("🚏 " + stop.name);
+
+        });
+
+    } catch (error) {
+
+        console.log(error);
+
+        alert("Unable to load bus stops.");
+
+    }
 
 }
 
 loadStops();
 
-// Live bus updates
+// ==========================
+// Live Bus Updates
+// ==========================
+
 onSnapshot(doc(db, "bus", "live"), (docSnap) => {
 
-    if (!docSnap.exists()) return;
+    if (!docSnap.exists()) {
+
+        document.getElementById("status").innerText = "Bus Offline";
+
+        return;
+
+    }
 
     const data = docSnap.data();
 
-    busMarker.setLatLng([data.latitude, data.longitude]);
+    if (data.latitude != null && data.longitude != null) {
 
-    map.setView([data.latitude, data.longitude], 15);
+        busMarker.setLatLng([data.latitude, data.longitude]);
 
-    document.getElementById("status").innerText = data.status;
+        map.setView([data.latitude, data.longitude], 15);
+
+    }
+
+    document.getElementById("status").innerText =
+        data.status || "Unknown";
 
     document.getElementById("location").innerText =
-        data.latitude.toFixed(5) + ", " + data.longitude.toFixed(5);
+        data.latitude.toFixed(6) + ", " + data.longitude.toFixed(6);
 
 });
 
+// ==========================
 // Logout
+// ==========================
+
 document.getElementById("logoutBtn").addEventListener("click", () => {
 
-    signOut(auth).then(() => {
+    signOut(auth)
+        .then(() => {
 
-        window.location.href = "login.html";
+            window.location.href = "login.html";
 
-    });
+        })
+        .catch((error) => {
+
+            alert(error.message);
+
+        });
 
 });
