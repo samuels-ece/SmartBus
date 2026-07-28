@@ -51,7 +51,7 @@ async function loadStops() {
         snapshot.forEach((stopDoc) => {
 
             const stop = stopDoc.data();
-
+alert(JSON.stringify(stop));
             // Show everything inside the document
             alert(JSON.stringify(stop));
 
