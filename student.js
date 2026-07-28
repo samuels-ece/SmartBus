@@ -39,13 +39,17 @@ async function loadStops() {
 
     try {
 
-        const snapshot = await getDocs(
-            collection(db, "routes", "bus1", "stops")
-        );
+        const stopsRef = collection(db, "routes", "bus1", "stops");
+
+        const snapshot = await getDocs(stopsRef);
+
+        alert("Number of Stops: " + snapshot.size);
 
         snapshot.forEach((stopDoc) => {
 
             const stop = stopDoc.data();
+
+            console.log(stop);
 
             L.marker([stop.latitude, stop.longitude])
                 .addTo(map)
@@ -57,7 +61,7 @@ async function loadStops() {
 
         console.log(error);
 
-        alert("Unable to load bus stops.");
+        alert(error.message);
 
     }
 
