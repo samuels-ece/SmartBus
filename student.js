@@ -25,9 +25,25 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 // Bus Marker
 // ==========================
 
-const busMarker = L.marker([13.0827, 80.2707])
-    .addTo(map)
-    .bindPopup("🚌 SmartBus");
+// ==========================
+// Bus Marker
+// ==========================
+
+const busIcon = L.icon({
+    iconUrl: "https://cdn-icons-png.flaticon.com/512/61/61231.png",
+    iconSize: [40, 40],
+    iconAnchor: [20, 40],
+    popupAnchor: [0, -35]
+});
+
+const busMarker = L.marker(
+    [13.0827, 80.2707],
+    {
+        icon: busIcon
+    }
+).addTo(map);
+
+busMarker.bindPopup("🚌 SmartBus");
 
 // ==========================
 // Load Bus Stops
