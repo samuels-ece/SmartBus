@@ -10,6 +10,24 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 // ==========================
+// Loading Popup
+// ==========================
+
+const loadingPopup = document.getElementById("loadingPopup");
+const popupTitle = document.getElementById("popupTitle");
+const popupMessage = document.getElementById("popupMessage");
+
+function showLoading(title, message) {
+    popupTitle.innerText = title;
+    popupMessage.innerText = message;
+    loadingPopup.style.display = "flex";
+}
+
+function hideLoading() {
+    loadingPopup.style.display = "none";
+}
+
+// ==========================
 // Create Map
 // ==========================
 
@@ -32,9 +50,12 @@ const busIcon = L.icon({
     popupAnchor: [1, -34],
     shadowSize: [41, 41]
 });
+
 const busMarker = L.marker(
     [13.0827, 80.2707],
-    { icon: busIcon }
+    {
+        icon: busIcon
+    }
 ).addTo(map);
 
 busMarker.bindPopup("🚌 SmartBus");
@@ -54,6 +75,7 @@ const studentIcon = L.icon({
 });
 
 let studentMarker = null;
+
 let studentLat = null;
 let studentLng = null;
 
@@ -62,6 +84,11 @@ let studentLng = null;
 // ==========================
 
 if (navigator.geolocation) {
+
+    showLoading(
+        "📍 Getting Your Location",
+        "Please wait while we detect your current location..."
+    );
 
     navigator.geolocation.getCurrentPosition(
 
@@ -72,28 +99,47 @@ if (navigator.geolocation) {
 
             studentMarker = L.marker(
                 [studentLat, studentLng],
-                { icon: studentIcon }
+                {
+                    icon: studentIcon
+                }
             ).addTo(map);
 
             studentMarker.bindPopup("📍 You");
+
+            popupTitle.innerText = "✅ Location Detected";
+
+            popupMessage.innerText =
+                "Your location has been detected successfully.\nLoading live bus...";
+
+            setTimeout(() => {
+
+                hideLoading();
+
+            }, 2000);
 
         },
 
         () => {
 
-            alert("Please allow location access to calculate the distance and arrival time.");
+            popupTitle.innerText = "❌ Location Required";
+
+            popupMessage.innerText =
+                "Please enable location permission to use SmartBus.";
 
         },
 
         {
-            enableHighAccuracy: true
+            enableHighAccuracy: true,
+            timeout: 15000,
+            maximumAge: 0
         }
 
     );
 
 }
+
 // ==========================
-// Live Bus Location
+// Live Bus Updates
 // ==========================
 
 onSnapshot(doc(db, "bus", "live"), (docSnap) => {
@@ -134,9 +180,11 @@ onSnapshot(doc(db, "bus", "live"), (docSnap) => {
             ", " +
             data.longitude.toFixed(6);
 
-        // These will be calculated after we get the student's location
-        document.getElementById("distance").innerText = "Calculating...";
-        document.getElementById("eta").innerText = "Calculating...";
+        document.getElementById("distance").innerText =
+            "Calculating...";
+
+        document.getElementById("eta").innerText =
+            "Calculating...";
 
     }
 
@@ -149,11 +197,13 @@ onSnapshot(doc(db, "bus", "live"), (docSnap) => {
 document.getElementById("logoutBtn").addEventListener("click", () => {
 
     signOut(auth)
+
         .then(() => {
 
             window.location.href = "login.html";
 
         })
+
         .catch((error) => {
 
             alert(error.message);
