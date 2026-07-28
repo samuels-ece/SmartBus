@@ -83,6 +83,10 @@ let studentLng = null;
 // Get Student Location
 // ==========================
 
+// ==========================
+// Get Student Location
+// ==========================
+
 if (navigator.geolocation) {
 
     showLoading(
@@ -90,23 +94,34 @@ if (navigator.geolocation) {
         "Please wait while we detect your current location..."
     );
 
-    navigator.geolocation.getCurrentPosition(
+    navigator.geolocation.watchPosition(
 
         (position) => {
 
             studentLat = position.coords.latitude;
             studentLng = position.coords.longitude;
 
-            studentMarker = L.marker(
-                [studentLat, studentLng],
-                {
-                    icon: studentIcon
-                }
-            ).addTo(map);
+            if (studentMarker == null) {
 
-            studentMarker.bindPopup("📍 You");
+                studentMarker = L.marker(
+                    [studentLat, studentLng],
+                    {
+                        icon: studentIcon
+                    }
+                ).addTo(map);
 
-            popupTitle.innerText = "✅ Location Detected";
+                studentMarker.bindPopup("📍 You");
+
+            } else {
+
+                studentMarker.setLatLng([
+                    studentLat,
+                    studentLng
+                ]);
+
+            }
+
+            popupTitle.innerText = "✅ Location Ready";
 
             popupMessage.innerText =
                 "Your location has been detected successfully.\nLoading live bus...";
@@ -115,26 +130,66 @@ if (navigator.geolocation) {
 
                 hideLoading();
 
-            }, 2000);
+            }, 1500);
 
         },
 
-        () => {
+        (error) => {
 
-            popupTitle.innerText = "❌ Location Required";
+            switch (error.code) {
 
-            popupMessage.innerText =
-                "Please enable location permission to use SmartBus.";
+                case error.PERMISSION_DENIED:
+
+                    popupTitle.innerText = "📍 Location Permission";
+
+                    popupMessage.innerText =
+                        "Please allow location permission.\nWe'll automatically continue once you enable it.";
+
+                    break;
+
+                case error.POSITION_UNAVAILABLE:
+
+                    popupTitle.innerText = "📡 Waiting for GPS";
+
+                    popupMessage.innerText =
+                        "Turn on GPS.\nWe'll automatically detect your location when it's available.";
+
+                    break;
+
+                case error.TIMEOUT:
+
+                    popupTitle.innerText = "⏳ Waiting for Location";
+
+                    popupMessage.innerText =
+                        "Still trying to detect your location...";
+
+                    break;
+
+                default:
+
+                    popupTitle.innerText = "📍 Waiting for Location";
+
+                    popupMessage.innerText =
+                        "Please enable Location.\nWe'll continue automatically.";
+
+            }
 
         },
 
         {
             enableHighAccuracy: true,
-            timeout: 15000,
-            maximumAge: 0
+            maximumAge: 0,
+            timeout: 15000
         }
 
     );
+
+} else {
+
+    popupTitle.innerText = "❌ Not Supported";
+
+    popupMessage.innerText =
+        "Your browser doesn't support Geolocation.";
 
 }
 
