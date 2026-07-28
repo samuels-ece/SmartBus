@@ -10,61 +10,59 @@ import {
 import {
     signOut
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-alert("NEW student.js loaded");
-// ==========================
-// Before Map
-// ==========================
 
-alert("Before Map");
+// ==========================
+// Create Map
+// ==========================
 
 const map = L.map("map").setView([13.0827, 80.2707], 13);
 
-alert("After Map");
-
-// OpenStreetMap
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution: "&copy; OpenStreetMap contributors"
 }).addTo(map);
-
-alert("Tile Layer Loaded");
 
 // ==========================
 // Bus Marker
 // ==========================
 
-alert("Before Marker");
-
 const busMarker = L.marker([13.0827, 80.2707]).addTo(map);
-
-alert("After Marker");
 
 busMarker.bindPopup("🚌 SmartBus");
 
 // ==========================
-// Load Stops
+// Load Bus Stops
 // ==========================
 
 async function loadStops() {
 
-    alert("Inside loadStops()");
-
     try {
 
-        alert("Creating Collection");
+        const snapshot = await getDocs(
+            collection(db, "routes", "bus1", "stops")
+        );
 
-        const stopsRef = collection(db, "routes", "bus1", "stops");
-
-        alert("Reading Firestore");
-
-        const snapshot = await getDocs(stopsRef);
-
-        alert("Documents Found: " + snapshot.size);
+        if (snapshot.empty) {
+            alert("No bus stops found.");
+            return;
+        }
 
         snapshot.forEach((stopDoc) => {
 
             const stop = stopDoc.data();
 
-            alert("Stop: " + stop.name);
+            console.log(stopDoc.id, stop);
+
+            if (
+                typeof stop.latitude !== "number" ||
+                typeof stop.longitude !== "number"
+            ) {
+
+                alert(
+                    "Invalid latitude/longitude in document: " + stopDoc.id
+                );
+
+                return;
+            }
 
             L.marker([stop.latitude, stop.longitude])
                 .addTo(map)
@@ -84,11 +82,7 @@ async function loadStops() {
 
 }
 
-alert("Before loadStops()");
-
 loadStops();
-
-alert("After loadStops()");
 
 // ==========================
 // Live Bus Updates
@@ -106,7 +100,13 @@ onSnapshot(doc(db, "bus", "live"), (docSnap) => {
 
     const data = docSnap.data();
 
-    if (data.latitude != null && data.longitude != null) {
+    document.getElementById("status").innerText =
+        data.status || "Unknown";
+
+    if (
+        typeof data.latitude === "number" &&
+        typeof data.longitude === "number"
+    ) {
 
         busMarker.setLatLng([data.latitude, data.longitude]);
 
@@ -116,9 +116,6 @@ onSnapshot(doc(db, "bus", "live"), (docSnap) => {
             data.latitude.toFixed(6) + ", " + data.longitude.toFixed(6);
 
     }
-
-    document.getElementById("status").innerText =
-        data.status || "Unknown";
 
 });
 
@@ -130,14 +127,10 @@ document.getElementById("logoutBtn").addEventListener("click", () => {
 
     signOut(auth)
         .then(() => {
-
             window.location.href = "login.html";
-
         })
         .catch((error) => {
-
             alert(error.message);
-
         });
 
 });
