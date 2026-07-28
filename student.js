@@ -25,10 +25,6 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 // Bus Marker
 // ==========================
 
-// ==========================
-// Bus Marker
-// ==========================
-
 const busIcon = L.icon({
     iconUrl: "https://cdn-icons-png.flaticon.com/512/61/61231.png",
     iconSize: [40, 40],
@@ -38,9 +34,7 @@ const busIcon = L.icon({
 
 const busMarker = L.marker(
     [13.0827, 80.2707],
-    {
-        icon: busIcon
-    }
+    { icon: busIcon }
 ).addTo(map);
 
 busMarker.bindPopup("🚌 SmartBus");
@@ -57,41 +51,23 @@ async function loadStops() {
             collection(db, "routes", "bus1", "stops")
         );
 
-        alert("Documents Found: " + snapshot.size);
-
         if (snapshot.empty) {
-            alert("No bus stops found.");
+            console.log("No bus stops found.");
             return;
         }
 
         snapshot.forEach((stopDoc) => {
 
             const stop = stopDoc.data();
-alert(JSON.stringify(stop));
-            // Show everything inside the document
-            alert(JSON.stringify(stop));
 
             console.log(stop);
 
-            alert("latitude value = " + stop.latitude);
-alert("latitude type = " + typeof stop.latitude);
+            const lat = Number(stop.latitude);
+            const lng = Number(stop.longitude);
 
-alert("longitude value = " + stop.longitude);
-alert("longitude type = " + typeof stop.longitude);
-
-const lat = Number(stop.latitude);
-const lng = Number(stop.longitude);
-
-alert("Converted lat = " + lat);
-alert("Converted lng = " + lng);
-
-            // Skip invalid coordinates
             if (isNaN(lat) || isNaN(lng)) {
-
-                alert("Invalid coordinates in " + stopDoc.id);
-
+                console.log("Invalid coordinates:", stopDoc.id);
                 return;
-
             }
 
             L.marker([lat, lng])
@@ -102,10 +78,7 @@ alert("Converted lng = " + lng);
 
     } catch (error) {
 
-        console.error(error);
-
-        alert("Firestore Error");
-        alert(error.message);
+        console.error("Firestore Error:", error);
 
     }
 
@@ -122,7 +95,6 @@ onSnapshot(doc(db, "bus", "live"), (docSnap) => {
     if (!docSnap.exists()) {
 
         document.getElementById("status").innerText = "Bus Offline";
-
         return;
 
     }
