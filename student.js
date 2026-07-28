@@ -59,9 +59,9 @@ async function loadStops() {
 
     } catch (error) {
 
-        console.log(error);
+    console.log(error);
 
-        alert(error.message);
+    alert("Error: " + error.message);
 
     }
 
