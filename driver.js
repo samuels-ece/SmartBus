@@ -5,19 +5,38 @@ import {
     updateDoc
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
+// Buttons
 const startTrip = document.getElementById("startTrip");
 const stopTrip = document.getElementById("stopTrip");
 
+// Popup
+const popup = document.getElementById("locationPopup");
+const popupMessage = document.getElementById("popupMessage");
+const popupOk = document.getElementById("popupOk");
+
 let watchId = null;
 
-// =====================
-// START TRIP
-// =====================
+// =======================
+// Popup Functions
+// =======================
+
+function showPopup(message) {
+    popupMessage.innerText = message;
+    popup.style.display = "flex";
+}
+
+popupOk.addEventListener("click", () => {
+    popup.style.display = "none";
+});
+
+// =======================
+// Start Trip
+// =======================
 
 startTrip.addEventListener("click", () => {
 
     if (!navigator.geolocation) {
-        alert("Your browser does not support Location Services.");
+        showPopup("Your browser does not support Location Services.");
         return;
     }
 
@@ -39,17 +58,21 @@ startTrip.addEventListener("click", () => {
             try {
 
                 await updateDoc(doc(db, "bus", "live"), {
-                    latitude: latitude,
-                    longitude: longitude,
+                    latitude,
+                    longitude,
                     status: "Running"
                 });
 
-                startTrip.innerText = "Trip Running";
+                startTrip.innerText = "🚌 Trip Running";
 
             } catch (error) {
 
                 console.log(error);
-                alert("Failed to update Firestore.");
+
+                showPopup("Unable to update the live bus location.");
+
+                startTrip.disabled = false;
+                startTrip.innerText = "▶ Start Trip";
 
             }
 
@@ -57,43 +80,42 @@ startTrip.addEventListener("click", () => {
 
         (error) => {
 
-    switch (error.code) {
+            startTrip.disabled = false;
+            startTrip.innerText = "▶ Start Trip";
 
-        case error.PERMISSION_DENIED:
+            switch (error.code) {
 
-            alert(
-                "📍 Location Required\n\n" +
-                "Please turn on your device's Location (GPS) and allow location permission to start the trip."
-            );
+                case error.PERMISSION_DENIED:
 
-            break;
+                    showPopup(
+                        "📍 Location Required\n\nPlease turn on your phone's Location (GPS) and allow location permission to start the trip."
+                    );
 
-        case error.POSITION_UNAVAILABLE:
+                    break;
 
-            alert(
-                "📍 Unable to get your location.\n\n" +
-                "Please make sure your GPS is turned on."
-            );
+                case error.POSITION_UNAVAILABLE:
 
-            break;
+                    showPopup(
+                        "📍 Unable to detect your location.\n\nPlease turn ON your device's GPS and try again."
+                    );
 
-        case error.TIMEOUT:
+                    break;
 
-            alert(
-                "📍 Location request timed out.\n\n" +
-                "Please try again."
-            );
+                case error.TIMEOUT:
 
-            break;
+                    showPopup(
+                        "📍 Location request timed out.\n\nPlease try again."
+                    );
 
-        default:
+                    break;
 
-            alert(
-                "Unable to get your current location.\n\n" +
-                "Please turn on GPS and try again."
-            );
+                default:
 
-    }
+                    showPopup(
+                        "Unable to get your location.\n\nPlease check your GPS and internet connection."
+                    );
+
+            }
 
         },
 
@@ -107,9 +129,9 @@ startTrip.addEventListener("click", () => {
 
 });
 
-// =====================
-// STOP TRIP
-// =====================
+// =======================
+// Stop Trip
+// =======================
 
 stopTrip.addEventListener("click", async () => {
 
@@ -122,11 +144,10 @@ stopTrip.addEventListener("click", async () => {
     }
 
     document.getElementById("tripStatus").innerText = "🔴 Stopped";
-
     document.getElementById("driverLocation").innerText = "Trip Ended";
 
     startTrip.disabled = false;
-    startTrip.innerText = "Start Trip";
+    startTrip.innerText = "▶ Start Trip";
 
     try {
 
@@ -134,7 +155,7 @@ stopTrip.addEventListener("click", async () => {
             status: "Stopped"
         });
 
-        alert("Trip Stopped Successfully");
+        showPopup("✅ Trip stopped successfully.");
 
     } catch (error) {
 
@@ -144,9 +165,9 @@ stopTrip.addEventListener("click", async () => {
 
 });
 
-// =====================
-// LOGOUT
-// =====================
+// =======================
+// Logout
+// =======================
 
 document.getElementById("logoutBtn").addEventListener("click", () => {
 
@@ -164,7 +185,7 @@ document.getElementById("logoutBtn").addEventListener("click", () => {
         })
         .catch((error) => {
 
-            alert(error.message);
+            showPopup(error.message);
 
         });
 
