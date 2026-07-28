@@ -7,6 +7,7 @@
 
 body{
     background:#f5f7fb;
+    color:#333;
 }
 
 /* Header */
@@ -18,46 +19,48 @@ header{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    box-shadow:0 2px 10px rgba(0,0,0,0.15);
+    box-shadow:0 3px 10px rgba(0,0,0,.15);
 }
 
 header h1{
-    font-size:30px;
+    font-size:28px;
+    font-weight:600;
 }
 
 header button{
     padding:10px 20px;
     border:none;
     border-radius:8px;
-    cursor:pointer;
     background:white;
     color:#1976d2;
-    font-weight:bold;
-    transition:0.3s;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.3s;
 }
 
 header button:hover{
-    background:#f2f2f2;
+    background:#eeeeee;
 }
 
-/* Dashboard Cards */
+/* Dashboard */
 
 .dashboard{
     display:flex;
     justify-content:center;
-    gap:20px;
-    padding:40px;
+    gap:25px;
     flex-wrap:wrap;
+    padding:35px;
 }
 
 .card{
-    width:280px;
+    width:300px;
     background:white;
+    border-radius:16px;
     padding:25px;
-    border-radius:15px;
-    box-shadow:0 10px 20px rgba(0,0,0,.08);
     text-align:center;
-    transition:0.3s;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+    transition:.3s;
 }
 
 .card:hover{
@@ -65,8 +68,9 @@ header button:hover{
 }
 
 .card h2{
-    margin-bottom:15px;
     color:#1976d2;
+    margin-bottom:15px;
+    font-size:22px;
 }
 
 .card p{
@@ -74,71 +78,173 @@ header button:hover{
     color:#555;
 }
 
-/* Map Section */
+/* Buttons */
 
-.map{
-    padding:40px;
-    text-align:center;
-}
-
-.map h2{
-    color:#1976d2;
-    margin-bottom:20px;
-    font-size:32px;
-}
-
-#map{
-    width:100%;
-    height:500px;
-    border-radius:15px;
-    overflow:hidden;
-    box-shadow:0 10px 25px rgba(0,0,0,.15);
-}
-
-/* Mobile Responsive */
-
-@media(max-width:768px){
-
-    header{
-        flex-direction:column;
-        gap:15px;
-    }
-
-    .dashboard{
-        padding:20px;
-    }
-
-    .card{
-        width:100%;
-    }
-
-    #map{
-        height:350px;
-    }
-
-}
 #startTrip,
 #stopTrip{
+
     width:220px;
-    padding:12px;
+    padding:14px;
     border:none;
     border-radius:10px;
     font-size:16px;
     font-weight:bold;
     cursor:pointer;
+    transition:.3s;
+
 }
 
 #startTrip{
+
     background:#1976d2;
     color:white;
+
+}
+
+#startTrip:hover{
+
+    background:#1565c0;
+
 }
 
 #stopTrip{
+
     background:#e53935;
     color:white;
+
 }
 
-#startTrip:hover,
 #stopTrip:hover{
-    opacity:.9;
+
+    background:#c62828;
+
+}
+
+/* Map */
+
+.map{
+
+    padding:35px;
+    text-align:center;
+
+}
+
+.map h2{
+
+    color:#1976d2;
+    margin-bottom:20px;
+
+}
+
+#map{
+
+    width:100%;
+    height:500px;
+    border-radius:15px;
+    overflow:hidden;
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
+
+}
+
+/* Popup */
+
+.popup{
+
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,.55);
+    justify-content:center;
+    align-items:center;
+    z-index:999;
+
+}
+
+.popup-content{
+
+    background:white;
+    width:340px;
+    max-width:90%;
+    border-radius:18px;
+    padding:30px;
+    text-align:center;
+    box-shadow:0 15px 40px rgba(0,0,0,.25);
+
+}
+
+.popup-content h2{
+
+    color:#1976d2;
+    margin:15px 0;
+
+}
+
+.popup-content p{
+
+    color:#555;
+    line-height:1.6;
+    margin-bottom:25px;
+
+}
+
+.popup-content button{
+
+    padding:12px 30px;
+    border:none;
+    border-radius:8px;
+    background:#1976d2;
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.3s;
+
+}
+
+.popup-content button:hover{
+
+    background:#1565c0;
+
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+    header{
+
+        flex-direction:column;
+        gap:15px;
+        text-align:center;
+
+    }
+
+    .dashboard{
+
+        padding:20px;
+
+    }
+
+    .card{
+
+        width:100%;
+
+    }
+
+    #map{
+
+        height:350px;
+
+    }
+
+    #startTrip,
+    #stopTrip{
+
+        width:100%;
+
+    }
+
 }
