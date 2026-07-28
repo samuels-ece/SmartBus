@@ -2,9 +2,7 @@ import { db, auth } from "./firebase.js";
 
 import {
     doc,
-    onSnapshot,
-    collection,
-    getDocs
+    onSnapshot
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 import {
@@ -40,53 +38,6 @@ const busMarker = L.marker(
 busMarker.bindPopup("🚌 SmartBus");
 
 // ==========================
-// Load Bus Stops
-// ==========================
-
-async function loadStops() {
-
-    try {
-
-        const snapshot = await getDocs(
-            collection(db, "routes", "bus1", "stops")
-        );
-
-        if (snapshot.empty) {
-            console.log("No bus stops found.");
-            return;
-        }
-
-        snapshot.forEach((stopDoc) => {
-
-            const stop = stopDoc.data();
-
-            console.log(stop);
-
-            const lat = Number(stop.latitude);
-            const lng = Number(stop.longitude);
-
-            if (isNaN(lat) || isNaN(lng)) {
-                console.log("Invalid coordinates:", stopDoc.id);
-                return;
-            }
-
-            L.marker([lat, lng])
-                .addTo(map)
-                .bindPopup("🚏 " + (stop.name || stopDoc.id));
-
-        });
-
-    } catch (error) {
-
-        console.error("Firestore Error:", error);
-
-    }
-
-}
-
-loadStops();
-
-// ==========================
 // Live Bus Location
 // ==========================
 
@@ -95,6 +46,10 @@ onSnapshot(doc(db, "bus", "live"), (docSnap) => {
     if (!docSnap.exists()) {
 
         document.getElementById("status").innerText = "Bus Offline";
+        document.getElementById("location").innerText = "--";
+        document.getElementById("distance").innerText = "--";
+        document.getElementById("eta").innerText = "--";
+
         return;
 
     }
@@ -123,6 +78,10 @@ onSnapshot(doc(db, "bus", "live"), (docSnap) => {
             data.latitude.toFixed(6) +
             ", " +
             data.longitude.toFixed(6);
+
+        // These will be calculated after we get the student's location
+        document.getElementById("distance").innerText = "Calculating...";
+        document.getElementById("eta").innerText = "Calculating...";
 
     }
 
