@@ -1,5 +1,3 @@
-alert("NEW student.js loaded");
-
 import { db, auth } from "./firebase.js";
 
 import {
@@ -12,7 +10,7 @@ import {
 import {
     signOut
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-
+alert("NEW student.js loaded");
 // ==========================
 // Before Map
 // ==========================
