@@ -41,42 +41,56 @@ async function loadStops() {
             collection(db, "routes", "bus1", "stops")
         );
 
+        alert("Documents Found: " + snapshot.size);
+
         if (snapshot.empty) {
+
             alert("No bus stops found.");
             return;
+
         }
 
         snapshot.forEach((stopDoc) => {
-snapshot.forEach((stopDoc) => {
 
-    const stop = stopDoc.data();
+            const stop = stopDoc.data();
 
-    alert(
-        stopDoc.id +
-        "\nLatitude: " + stop.latitude +
-        "\nLongitude: " + stop.longitude
-    );
+            alert(
+                "Document : " + stopDoc.id +
+                "\nName : " + stop.name +
+                "\nLatitude : " + stop.latitude +
+                "\nLongitude : " + stop.longitude
+            );
 
-    if (
-        stop.latitude === undefined ||
-        stop.longitude === undefined
-    ) {
-        alert("Problem in document: " + stopDoc.id);
-        return;
-    }
+            if (
+                stop.latitude === undefined ||
+                stop.longitude === undefined
+            ) {
 
-    L.marker([stop.latitude, stop.longitude])
-        .addTo(map)
-        .bindPopup("🚏 " + stop.name);
+                alert("Latitude or Longitude missing in " + stopDoc.id);
+                return;
 
-});
+            }
+
+            const lat = Number(stop.latitude);
+            const lng = Number(stop.longitude);
+
+            if (isNaN(lat) || isNaN(lng)) {
+
+                alert("Invalid coordinates in " + stopDoc.id);
+                return;
+
+            }
+
+            L.marker([lat, lng])
+                .addTo(map)
+                .bindPopup("🚏 " + stop.name);
+
+        });
 
     } catch (error) {
 
         alert("Firestore Error");
-
         alert(error.message);
-
         console.log(error);
 
     }
@@ -86,7 +100,7 @@ snapshot.forEach((stopDoc) => {
 loadStops();
 
 // ==========================
-// Live Bus Updates
+// Live Bus Location
 // ==========================
 
 onSnapshot(doc(db, "bus", "live"), (docSnap) => {
@@ -94,7 +108,6 @@ onSnapshot(doc(db, "bus", "live"), (docSnap) => {
     if (!docSnap.exists()) {
 
         document.getElementById("status").innerText = "Bus Offline";
-
         return;
 
     }
@@ -114,7 +127,9 @@ onSnapshot(doc(db, "bus", "live"), (docSnap) => {
         map.setView([data.latitude, data.longitude], 15);
 
         document.getElementById("location").innerText =
-            data.latitude.toFixed(6) + ", " + data.longitude.toFixed(6);
+            data.latitude.toFixed(6) +
+            ", " +
+            data.longitude.toFixed(6);
 
     }
 
@@ -128,10 +143,14 @@ document.getElementById("logoutBtn").addEventListener("click", () => {
 
     signOut(auth)
         .then(() => {
+
             window.location.href = "login.html";
+
         })
         .catch((error) => {
+
             alert(error.message);
+
         });
 
 });
