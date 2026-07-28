@@ -10,11 +10,13 @@ body{
     color:#333;
 }
 
-/* Header */
+/* ==========================
+   Header
+========================== */
 
 header{
     background:#1976d2;
-    color:white;
+    color:#fff;
     padding:20px;
     display:flex;
     justify-content:space-between;
@@ -31,7 +33,7 @@ header button{
     padding:10px 20px;
     border:none;
     border-radius:8px;
-    background:white;
+    background:#fff;
     color:#1976d2;
     font-size:15px;
     font-weight:600;
@@ -40,22 +42,24 @@ header button{
 }
 
 header button:hover{
-    background:#eeeeee;
+    background:#ececec;
 }
 
-/* Dashboard */
+/* ==========================
+   Dashboard Cards
+========================== */
 
 .dashboard{
     display:flex;
+    flex-wrap:wrap;
     justify-content:center;
     gap:25px;
-    flex-wrap:wrap;
     padding:35px;
 }
 
 .card{
-    width:300px;
-    background:white;
+    width:280px;
+    background:#fff;
     border-radius:16px;
     padding:25px;
     text-align:center;
@@ -64,153 +68,134 @@ header button:hover{
 }
 
 .card:hover{
-    transform:translateY(-8px);
+    transform:translateY(-6px);
 }
 
 .card h2{
     color:#1976d2;
     margin-bottom:15px;
-    font-size:22px;
+    font-size:21px;
 }
 
 .card p{
     font-size:18px;
     color:#555;
+    word-break:break-word;
 }
 
-/* Buttons */
-
-#startTrip,
-#stopTrip{
-
-    width:220px;
-    padding:14px;
-    border:none;
-    border-radius:10px;
-    font-size:16px;
-    font-weight:bold;
-    cursor:pointer;
-    transition:.3s;
-
-}
-
-#startTrip{
-
-    background:#1976d2;
-    color:white;
-
-}
-
-#startTrip:hover{
-
-    background:#1565c0;
-
-}
-
-#stopTrip{
-
-    background:#e53935;
-    color:white;
-
-}
-
-#stopTrip:hover{
-
-    background:#c62828;
-
-}
-
-/* Map */
+/* ==========================
+   Map
+========================== */
 
 .map{
-
     padding:35px;
-    text-align:center;
-
 }
 
 .map h2{
-
+    text-align:center;
     color:#1976d2;
     margin-bottom:20px;
-
 }
 
 #map{
-
     width:100%;
     height:500px;
     border-radius:15px;
     overflow:hidden;
     box-shadow:0 10px 25px rgba(0,0,0,.15);
-
 }
 
-/* Popup */
+/* ==========================
+   Footer
+========================== */
 
-.popup{
+footer{
+    margin-top:30px;
+    padding:20px;
+    text-align:center;
+    color:#666;
+}
 
-    display:none;
+/* ==========================
+   Loading Popup
+========================== */
+
+.loading-popup{
+
     position:fixed;
     top:0;
     left:0;
     width:100%;
     height:100%;
-    background:rgba(0,0,0,.55);
+
+    background:rgba(0,0,0,.45);
+
+    display:none;
     justify-content:center;
     align-items:center;
-    z-index:999;
+
+    z-index:9999;
 
 }
 
-.popup-content{
+.loading-box{
 
-    background:white;
-    width:340px;
+    background:#fff;
+    width:330px;
     max-width:90%;
+
     border-radius:18px;
+
     padding:30px;
+
     text-align:center;
+
     box-shadow:0 15px 40px rgba(0,0,0,.25);
 
 }
 
-.popup-content h2{
+.loading-box h2{
 
     color:#1976d2;
-    margin:15px 0;
+    margin-bottom:15px;
 
 }
 
-.popup-content p{
+.loading-box p{
 
     color:#555;
     line-height:1.6;
-    margin-bottom:25px;
 
 }
 
-.popup-content button{
+.loader{
 
-    padding:12px 30px;
-    border:none;
-    border-radius:8px;
-    background:#1976d2;
-    color:white;
-    font-size:16px;
-    font-weight:bold;
-    cursor:pointer;
-    transition:.3s;
+    width:60px;
+    height:60px;
 
-}
+    margin:auto;
+    margin-bottom:20px;
 
-.popup-content button:hover{
+    border:5px solid #ddd;
+    border-top:5px solid #1976d2;
 
-    background:#1565c0;
+    border-radius:50%;
+
+    animation:spin 1s linear infinite;
 
 }
 
-/* Mobile */
+@keyframes spin{
+
+    100%{
+        transform:rotate(360deg);
+    }
+
+}
+
+/* ==========================
+   Mobile
+========================== */
 
 @media(max-width:768px){
 
@@ -236,15 +221,8 @@ header button:hover{
 
     #map{
 
-        height:350px;
+        height:380px;
 
     }
 
-    #startTrip,
-    #stopTrip{
-
-        width:100%;
-
     }
-
-}
