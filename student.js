@@ -82,19 +82,18 @@ let studentLng = null;
 // ==========================
 // Get Student Location
 // ==========================
-
 // ==========================
 // Get Student Location
 // ==========================
 
-if (navigator.geolocation) {
+function getStudentLocation() {
 
     showLoading(
         "📍 Getting Your Location",
         "Please wait while we detect your current location..."
     );
 
-    navigator.geolocation.watchPosition(
+    navigator.geolocation.getCurrentPosition(
 
         (position) => {
 
@@ -124,7 +123,7 @@ if (navigator.geolocation) {
             popupTitle.innerText = "✅ Location Ready";
 
             popupMessage.innerText =
-                "Your location has been detected successfully.\nLoading live bus...";
+                "Loading live bus...";
 
             setTimeout(() => {
 
@@ -133,66 +132,6 @@ if (navigator.geolocation) {
             }, 1500);
 
         },
-
-        (error) => {
-
-            switch (error.code) {
-
-                case error.PERMISSION_DENIED:
-
-                    popupTitle.innerText = "📍 Location Permission";
-
-                    popupMessage.innerText =
-                        "Please allow location permission.\nWe'll automatically continue once you enable it.";
-
-                    break;
-
-                case error.POSITION_UNAVAILABLE:
-
-                    popupTitle.innerText = "📡 Waiting for GPS";
-
-                    popupMessage.innerText =
-                        "Turn on GPS.\nWe'll automatically detect your location when it's available.";
-
-                    break;
-
-                case error.TIMEOUT:
-
-                    popupTitle.innerText = "⏳ Waiting for Location";
-
-                    popupMessage.innerText =
-                        "Still trying to detect your location...";
-
-                    break;
-
-                default:
-
-                    popupTitle.innerText = "📍 Waiting for Location";
-
-                    popupMessage.innerText =
-                        "Please enable Location.\nWe'll continue automatically.";
-
-            }
-
-        },
-
-        {
-            enableHighAccuracy: true,
-            maximumAge: 0,
-            timeout: 15000
-        }
-
-    );
-
-} else {
-
-    popupTitle.innerText = "❌ Not Supported";
-
-    popupMessage.innerText =
-        "Your browser doesn't support Geolocation.";
-
-}
-
 // ==========================
 // Live Bus Updates
 // ==========================
