@@ -57,8 +57,17 @@ alert(JSON.stringify(stop));
 
             console.log(stop);
 
-            const lat = Number(stop.latitude);
-            const lng = Number(stop.longitude);
+            alert("latitude value = " + stop.latitude);
+alert("latitude type = " + typeof stop.latitude);
+
+alert("longitude value = " + stop.longitude);
+alert("longitude type = " + typeof stop.longitude);
+
+const lat = Number(stop.latitude);
+const lng = Number(stop.longitude);
+
+alert("Converted lat = " + lat);
+alert("Converted lng = " + lng);
 
             // Skip invalid coordinates
             if (isNaN(lat) || isNaN(lng)) {
