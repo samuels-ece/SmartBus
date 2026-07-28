@@ -1,3 +1,4 @@
+alert("NEW student.js loaded");
 import { db, auth } from "./firebase.js";
 
 import {
