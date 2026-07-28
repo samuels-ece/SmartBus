@@ -17,8 +17,6 @@ import {
 
 const map = L.map("map").setView([13.0827, 80.2707], 13);
 
-// OpenStreetMap
-
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution: "&copy; OpenStreetMap contributors"
 }).addTo(map);
@@ -43,7 +41,12 @@ async function loadStops() {
 
         const snapshot = await getDocs(stopsRef);
 
-        alert("Number of Stops: " + snapshot.size);
+        console.log("Stops Found:", snapshot.size);
+
+        if (snapshot.empty) {
+            alert("No bus stops found.");
+            return;
+        }
 
         snapshot.forEach((stopDoc) => {
 
@@ -51,17 +54,28 @@ async function loadStops() {
 
             console.log(stop);
 
-            L.marker([stop.latitude, stop.longitude])
-                .addTo(map)
-                .bindPopup("🚏 " + stop.name);
+            if (
+                typeof stop.latitude === "number" &&
+                typeof stop.longitude === "number"
+            ) {
+
+                L.marker([stop.latitude, stop.longitude])
+                    .addTo(map)
+                    .bindPopup("🚏 " + stop.name);
+
+            } else {
+
+                console.log("Invalid stop data:", stopDoc.id);
+
+            }
 
         });
 
     } catch (error) {
 
-    console.log(error);
+        console.error(error);
 
-    alert("Error: " + error.message);
+        alert("Error: " + error.message);
 
     }
 
@@ -85,19 +99,19 @@ onSnapshot(doc(db, "bus", "live"), (docSnap) => {
 
     const data = docSnap.data();
 
-    if (data.latitude != null && data.longitude != null) {
+    if (typeof data.latitude === "number" && typeof data.longitude === "number") {
 
         busMarker.setLatLng([data.latitude, data.longitude]);
 
         map.setView([data.latitude, data.longitude], 15);
 
+        document.getElementById("location").innerText =
+            data.latitude.toFixed(6) + ", " + data.longitude.toFixed(6);
+
     }
 
     document.getElementById("status").innerText =
         data.status || "Unknown";
-
-    document.getElementById("location").innerText =
-        data.latitude.toFixed(6) + ", " + data.longitude.toFixed(6);
 
 });
 
