@@ -3,19 +3,19 @@
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Student Dashboard</title>
+    <title>Student Dashboard | SmartBus</title>
 
-<link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="dashboard.css">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 
 </head>
 
@@ -32,18 +32,35 @@
 <div class="dashboard">
 
     <div class="card">
+
         <h2>🟢 Bus Status</h2>
-        <p id="status">Running</p>
+
+        <p id="status">Waiting...</p>
+
     </div>
 
     <div class="card">
+
         <h2>⏱ Estimated Arrival</h2>
-        <p id="eta">12 Minutes</p>
+
+        <p id="eta">Calculating...</p>
+
     </div>
 
     <div class="card">
+
+        <h2>🚏 Next Stop</h2>
+
+        <p id="nextStop">Loading...</p>
+
+    </div>
+
+    <div class="card">
+
         <h2>📍 Current Location</h2>
-        <p id="location">MIT Campus Gate</p>
+
+        <p id="location">Waiting for Bus...</p>
+
     </div>
 
 </div>
@@ -55,6 +72,12 @@
     <div id="map"></div>
 
 </section>
+
+<footer style="text-align:center;padding:20px;color:#666;">
+
+    <p>© 2026 SmartBus | Real-Time Bus Tracking System</p>
+
+</footer>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
