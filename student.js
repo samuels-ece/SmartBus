@@ -157,15 +157,14 @@ function getStudentLocation(){
 
         },
 
-        (error)=>{
+        (error) => {
 
-            popupTitle.innerText="📍 Location Required";
+    popupTitle.innerText = "📍 Preparing SmartBus";
 
-            popupMessage.innerText=
+    popupMessage.innerText =
+        "We're getting everything ready for you.\n\nPlease enable your device's Location (GPS) to view live bus tracking, your distance from the bus, and the estimated arrival time.\n\nSmartBus will continue automatically once your location is available.";
 
-            "Please turn ON your phone's Location (GPS).\n\nOnce enabled, return to SmartBus and tap the button below.";
-
-        },
+},
 
         {
 
