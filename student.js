@@ -1,4 +1,5 @@
 alert("NEW student.js loaded");
+
 import { db, auth } from "./firebase.js";
 
 import {
@@ -36,47 +37,39 @@ busMarker.bindPopup("🚌 SmartBus");
 
 async function loadStops() {
 
+    alert("Step 1");
+
     try {
+
+        alert("Step 2");
 
         const stopsRef = collection(db, "routes", "bus1", "stops");
 
+        alert("Step 3");
+
         const snapshot = await getDocs(stopsRef);
 
-        console.log("Stops Found:", snapshot.size);
+        alert("Step 4");
 
-        if (snapshot.empty) {
-            alert("No bus stops found.");
-            return;
-        }
+        alert("Documents Found: " + snapshot.size);
 
         snapshot.forEach((stopDoc) => {
 
             const stop = stopDoc.data();
 
-            console.log(stop);
+            alert("Stop: " + stop.name);
 
-            if (
-                typeof stop.latitude === "number" &&
-                typeof stop.longitude === "number"
-            ) {
-
-                L.marker([stop.latitude, stop.longitude])
-                    .addTo(map)
-                    .bindPopup("🚏 " + stop.name);
-
-            } else {
-
-                console.log("Invalid stop data:", stopDoc.id);
-
-            }
+            L.marker([stop.latitude, stop.longitude])
+                .addTo(map)
+                .bindPopup("🚏 " + stop.name);
 
         });
 
     } catch (error) {
 
+        alert("ERROR");
+        alert(error.message);
         console.error(error);
-
-        alert("Error: " + error.message);
 
     }
 
@@ -91,16 +84,13 @@ loadStops();
 onSnapshot(doc(db, "bus", "live"), (docSnap) => {
 
     if (!docSnap.exists()) {
-
         document.getElementById("status").innerText = "Bus Offline";
-
         return;
-
     }
 
     const data = docSnap.data();
 
-    if (typeof data.latitude === "number" && typeof data.longitude === "number") {
+    if (data.latitude != null && data.longitude != null) {
 
         busMarker.setLatLng([data.latitude, data.longitude]);
 
@@ -108,7 +98,6 @@ onSnapshot(doc(db, "bus", "live"), (docSnap) => {
 
         document.getElementById("location").innerText =
             data.latitude.toFixed(6) + ", " + data.longitude.toFixed(6);
-
     }
 
     document.getElementById("status").innerText =
@@ -124,14 +113,10 @@ document.getElementById("logoutBtn").addEventListener("click", () => {
 
     signOut(auth)
         .then(() => {
-
             window.location.href = "login.html";
-
         })
         .catch((error) => {
-
             alert(error.message);
-
         });
 
 });
