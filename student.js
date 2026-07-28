@@ -40,6 +40,59 @@ const busMarker = L.marker(
 busMarker.bindPopup("🚌 SmartBus");
 
 // ==========================
+// Student Marker
+// ==========================
+
+const studentIcon = L.icon({
+    iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png",
+    shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+});
+
+let studentMarker = null;
+let studentLat = null;
+let studentLng = null;
+
+// ==========================
+// Get Student Location
+// ==========================
+
+if (navigator.geolocation) {
+
+    navigator.geolocation.getCurrentPosition(
+
+        (position) => {
+
+            studentLat = position.coords.latitude;
+            studentLng = position.coords.longitude;
+
+            studentMarker = L.marker(
+                [studentLat, studentLng],
+                { icon: studentIcon }
+            ).addTo(map);
+
+            studentMarker.bindPopup("📍 You");
+
+        },
+
+        () => {
+
+            alert("Please allow location access to calculate the distance and arrival time.");
+
+        },
+
+        {
+            enableHighAccuracy: true
+        }
+
+    );
+
+}
+// ==========================
 // Live Bus Location
 // ==========================
 
