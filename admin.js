@@ -1,15 +1,15 @@
 import { db, auth } from "./firebase.js";
 
 import {
-  doc,
-  onSnapshot
+    doc,
+    onSnapshot
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 import {
-  signOut
+    signOut
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
-// Create map
+// Create Map
 const map = L.map("map").setView([13.0827, 80.2707], 15);
 
 // OpenStreetMap
@@ -22,19 +22,29 @@ const busMarker = L.marker([13.0827, 80.2707]).addTo(map);
 
 busMarker.bindPopup("🚌 SmartBus");
 
-// Listen for live bus updates
+// Listen for live updates
 onSnapshot(doc(db, "bus", "live"), (docSnap) => {
 
-    if (!docSnap.exists()) return;
+    if (!docSnap.exists()) {
+
+        document.getElementById("status").innerText = "No Bus Data";
+
+        return;
+    }
 
     const data = docSnap.data();
 
-    const lat = data.latitude;
-    const lng = data.longitude;
+    const lat = data.latitude ?? 0;
+    const lng = data.longitude ?? 0;
 
-    document.getElementById("status").innerText = data.status;
+    document.getElementById("status").innerText = data.status || "Unknown";
+
     document.getElementById("latitude").innerText = lat.toFixed(6);
+
     document.getElementById("longitude").innerText = lng.toFixed(6);
+
+    document.getElementById("lastUpdated").innerText =
+        new Date().toLocaleTimeString();
 
     busMarker.setLatLng([lat, lng]);
 
@@ -46,11 +56,11 @@ onSnapshot(doc(db, "bus", "live"), (docSnap) => {
 document.getElementById("logoutBtn").addEventListener("click", () => {
 
     signOut(auth)
-    .then(() => {
-        window.location.href = "login.html";
-    })
-    .catch((error) => {
-        alert(error.message);
-    });
+        .then(() => {
+            window.location.href = "login.html";
+        })
+        .catch((error) => {
+            alert(error.message);
+        });
 
 });
