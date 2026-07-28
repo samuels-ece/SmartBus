@@ -25,9 +25,9 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 // Bus Marker
 // ==========================
 
-const busMarker = L.marker([13.0827, 80.2707]).addTo(map);
-
-busMarker.bindPopup("🚌 SmartBus");
+const busMarker = L.marker([13.0827, 80.2707])
+    .addTo(map)
+    .bindPopup("🚌 SmartBus");
 
 // ==========================
 // Load Bus Stops
@@ -44,54 +44,43 @@ async function loadStops() {
         alert("Documents Found: " + snapshot.size);
 
         if (snapshot.empty) {
-
             alert("No bus stops found.");
             return;
-
         }
 
         snapshot.forEach((stopDoc) => {
 
             const stop = stopDoc.data();
 
-            alert(
-                "Document : " + stopDoc.id +
-                "\nName : " + stop.name +
-                "\nLatitude : " + stop.latitude +
-                "\nLongitude : " + stop.longitude
-            );
+            // Show everything inside the document
+            alert(JSON.stringify(stop));
 
-            if (
-                stop.latitude === undefined ||
-                stop.longitude === undefined
-            ) {
-
-                alert("Latitude or Longitude missing in " + stopDoc.id);
-                return;
-
-            }
+            console.log(stop);
 
             const lat = Number(stop.latitude);
             const lng = Number(stop.longitude);
 
+            // Skip invalid coordinates
             if (isNaN(lat) || isNaN(lng)) {
 
                 alert("Invalid coordinates in " + stopDoc.id);
+
                 return;
 
             }
 
             L.marker([lat, lng])
                 .addTo(map)
-                .bindPopup("🚏 " + stop.name);
+                .bindPopup("🚏 " + (stop.name || stopDoc.id));
 
         });
 
     } catch (error) {
 
+        console.error(error);
+
         alert("Firestore Error");
         alert(error.message);
-        console.log(error);
 
     }
 
@@ -108,6 +97,7 @@ onSnapshot(doc(db, "bus", "live"), (docSnap) => {
     if (!docSnap.exists()) {
 
         document.getElementById("status").innerText = "Bus Offline";
+
         return;
 
     }
@@ -122,9 +112,15 @@ onSnapshot(doc(db, "bus", "live"), (docSnap) => {
         typeof data.longitude === "number"
     ) {
 
-        busMarker.setLatLng([data.latitude, data.longitude]);
+        busMarker.setLatLng([
+            data.latitude,
+            data.longitude
+        ]);
 
-        map.setView([data.latitude, data.longitude], 15);
+        map.setView([
+            data.latitude,
+            data.longitude
+        ], 15);
 
         document.getElementById("location").innerText =
             data.latitude.toFixed(6) +
