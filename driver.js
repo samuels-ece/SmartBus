@@ -11,6 +11,7 @@ const stopTrip = document.getElementById("stopTrip");
 
 // Popup
 const popup = document.getElementById("locationPopup");
+const popupTitle = document.getElementById("popupTitle");
 const popupMessage = document.getElementById("popupMessage");
 const popupOk = document.getElementById("popupOk");
 
@@ -20,9 +21,13 @@ let watchId = null;
 // Popup Functions
 // =======================
 
-function showPopup(message) {
+function showPopup(title, message) {
+
+    popupTitle.innerText = title;
     popupMessage.innerText = message;
+
     popup.style.display = "flex";
+
 }
 
 popupOk.addEventListener("click", () => {
@@ -88,24 +93,27 @@ startTrip.addEventListener("click", () => {
                 case error.PERMISSION_DENIED:
 
                     showPopup(
-                        "📍 Location Required\n\nPlease turn on your phone's Location (GPS) and allow location permission to start the trip."
-                    );
+"📍 Location Required",
+"Please enable your device's Location (GPS) and allow permission to start the trip.\n\nAfter enabling Location, try starting the trip again."
+);
 
                     break;
 
                 case error.POSITION_UNAVAILABLE:
 
                     showPopup(
-                        "📍 Unable to detect your location.\n\nPlease turn ON your device's GPS and try again."
-                    );
+"📡 GPS Signal Unavailable",
+"SmartBus could not detect your current location.\n\nPlease turn ON GPS and try again."
+);
 
                     break;
 
                 case error.TIMEOUT:
 
                     showPopup(
-                        "📍 Location request timed out.\n\nPlease try again."
-                    );
+"⏳ Location Timeout",
+"Your location request took too long.\n\nPlease check GPS and try again."
+);
 
                     break;
 
