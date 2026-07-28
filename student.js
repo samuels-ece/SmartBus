@@ -47,28 +47,29 @@ async function loadStops() {
         }
 
         snapshot.forEach((stopDoc) => {
+snapshot.forEach((stopDoc) => {
 
-            const stop = stopDoc.data();
+    const stop = stopDoc.data();
 
-            console.log(stopDoc.id, stop);
+    alert(
+        stopDoc.id +
+        "\nLatitude: " + stop.latitude +
+        "\nLongitude: " + stop.longitude
+    );
 
-            if (
-                typeof stop.latitude !== "number" ||
-                typeof stop.longitude !== "number"
-            ) {
+    if (
+        stop.latitude === undefined ||
+        stop.longitude === undefined
+    ) {
+        alert("Problem in document: " + stopDoc.id);
+        return;
+    }
 
-                alert(
-                    "Invalid latitude/longitude in document: " + stopDoc.id
-                );
+    L.marker([stop.latitude, stop.longitude])
+        .addTo(map)
+        .bindPopup("🚏 " + stop.name);
 
-                return;
-            }
-
-            L.marker([stop.latitude, stop.longitude])
-                .addTo(map)
-                .bindPopup("🚏 " + stop.name);
-
-        });
+});
 
     } catch (error) {
 
