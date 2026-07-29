@@ -159,18 +159,53 @@ function getStudentLocation(){
 
         (error) => {
 
-    popupTitle.innerText = "📍 Location Access Required";
+    console.log("Location Error Code:", error.code);
+    console.log("Location Error Message:", error.message);
 
-popupMessage.innerText =
-"To provide live bus tracking, distance, and estimated arrival time, SmartBus requires access to your device's location.\n\n1. Turn on your device's Location (GPS).\n2. Return to SmartBus.\n3. Refresh this page to continue.";
-},
+    switch (error.code) {
+
+        case error.PERMISSION_DENIED:
+
+            popupTitle.innerText = "📍 Location Permission Required";
+
+            popupMessage.innerText =
+                "Please allow SmartBus to access your location.\n\nIf Location is already enabled, refresh this page after granting permission.";
+
+            break;
+
+        case error.POSITION_UNAVAILABLE:
+
+            popupTitle.innerText = "📡 Unable to Detect Location";
+
+            popupMessage.innerText =
+                "Turn on your phone's GPS and move to an open area if possible.\n\nThen refresh this page.";
+
+            break;
+
+        case error.TIMEOUT:
+
+            popupTitle.innerText = "⏳ Location Timed Out";
+
+            popupMessage.innerText =
+                "SmartBus couldn't get your location in time.\n\nPlease check your GPS and internet connection, then refresh this page.";
+
+            break;
+
+        default:
+
+            popupTitle.innerText = "⚠️ Location Error";
+
+            popupMessage.innerText =
+                "An unexpected error occurred while detecting your location.\n\nPlease refresh and try again.";
+
+    }
+
+        },
 
         {
-
-            enableHighAccuracy:true,
-            timeout:10000,
-            maximumAge:0
-
+    enableHighAccuracy: true,
+    timeout: 20000,
+    maximumAge: 10000
         }
 
     );
